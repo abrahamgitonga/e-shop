@@ -1,23 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
-
+import {useState, useEffect} from 'react'
+import Shop from "./components/Shop";
+import axios from 'axios';
 function App() {
+  const [ShopItems, setShopItems]=useState([]);
+  const [loading, setLoading]= useState(true);
+useEffect(()=>{
+  axios.get("https://fakestoreapi.com/products").then(({data})=>{
+    setLoading(false)
+    setShopItems(data);
+  });
+
+},[])
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Shop loading={loading} items={ShopItems} onItemAdd={itemData=>{
+        setShopItems([...ShopItems,itemData])
+      }}/>
+  
     </div>
   );
 }
